@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('dashboard', 'DashboardController@index');
-Route::get('orders', 'OrderController@index');
+Route::get('orders/shipped', 'OrderController@shipped');
 
 Auth::routes();
 

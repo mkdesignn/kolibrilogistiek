@@ -13,6 +13,12 @@ class DatabaseSeeder extends Seeder
     {
 //         $this->call(UsersTableSeeder::class);
 
-        factory(\App\Purchaseorderlines::class, 10)->create();
+        factory(\App\Purchaseorder::class, 30)->create()->each(function($purchaseOrder){
+            factory(\App\Purchaseorderlines::class)
+                ->create([
+                    'purchaseorder_id'=>$purchaseOrder->id,
+                    'user_id'=>$purchaseOrder->user_id
+                ]);
+        });
     }
 }

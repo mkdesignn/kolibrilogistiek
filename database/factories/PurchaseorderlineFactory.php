@@ -15,12 +15,11 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Purchaseorderlines::class, function (Faker $faker) {
 
-    $purchaseOrder = factory(\App\Purchaseorder::class)->create();
 
     return [
-        'purchaseorder_id' => $purchaseOrder->id,
+        'purchaseorder_id' => null,
         'product_id' => factory(\App\Product::class)->create()->id,
-        'user_id' => $purchaseOrder->user_id,
+        'user_id' => null,
         'received_by' => 1,
         'quantity' => 1,
         'quantity_received' => 1,

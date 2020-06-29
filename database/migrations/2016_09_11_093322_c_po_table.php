@@ -25,6 +25,7 @@ class CPoTable extends Migration
             $table->string('number');
 
             $table->date('expected_at');
+            $table->date('shipped_at');
             $table->dateTime('received_at');
             $table->text('trackandtrace');
 

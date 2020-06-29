@@ -77,5 +77,6 @@
         </main>
     </div>
 
+    <script src="{{ asset('js/dashboard.js') }}"></script>
 </body>
 </html>
