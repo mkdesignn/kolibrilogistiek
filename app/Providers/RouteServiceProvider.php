@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\CardGroup;
+use App\Purchaseorder;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
@@ -24,8 +26,12 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         //
-
         parent::boot();
+
+        Route::model('order_id', Purchaseorder::class, function ($value) {
+            $value = (int)$value;
+            Purchaseorder::whereId($value)->count() === 0 ? abort(404) : null;
+        });
     }
 
     /**

@@ -19,4 +19,8 @@ class Purchaseorder extends Model
         'expected_at',
         'received_at'
     ];
+
+    public function customer(){
+        return $this->hasOne(User::class, 'id', 'customer_id');
+    }
 }
