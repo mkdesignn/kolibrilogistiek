@@ -18,6 +18,7 @@ class OrderTest extends TestCase
      */
     public function shipped_should_throw_an_error_if_start_date_was_missing()
     {
+        $this->be($this->createCustomer());
 
         $this->json(self::HTTP_GET, 'orders/shipped')
             ->assertStatus(self::HTTP_UNPROCESSABLE_ENTITY)
@@ -32,6 +33,8 @@ class OrderTest extends TestCase
     public function shipped_should_throw_an_error_if_end_date_was_missing()
     {
 
+        $this->be($this->createCustomer());
+
         $this->json(self::HTTP_GET, 'orders/shipped')
             ->assertStatus(self::HTTP_UNPROCESSABLE_ENTITY)
             ->assertJsonStructure(['errors'=>['end_date']]);
@@ -44,6 +47,8 @@ class OrderTest extends TestCase
      */
     public function shipped_should_throw_an_error_if_end_date_was_before_of_start_date()
     {
+
+        $this->be($this->createCustomer());
 
         $this->json(self::HTTP_GET, 'orders/shipped?start_date='.now()->toDateString().'&'.now()->subDays(3)->toDateString())
             ->assertStatus(self::HTTP_UNPROCESSABLE_ENTITY)
