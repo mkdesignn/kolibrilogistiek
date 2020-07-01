@@ -11,8 +11,14 @@ To run the migration, You can use
 ```
 php artisan migrate
 ```
+
+To have fake data, You can run 
+```
+php artisan db:seed
+```
+
 Note: You can specify the database configuration from the .env, 
-I have used mysql for the database, But you can change the driver to any other driver (pgsql, sqlserver, I don't know if its supported :D).
+I have used mysql for the database, But you can change the driver to any other driver (pgsql, sqlserver, ...).
 
 **
 You'll need to create the database before running the migration
@@ -30,3 +36,5 @@ You can also run the tests by using
 ```
 vendor/bin/phpunit
 ```
+
+**You can use admin user to access the dashboard, username: admin@kolibrilogistiek.com | password: secret
