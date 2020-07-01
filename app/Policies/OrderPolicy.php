@@ -23,7 +23,7 @@ class OrderPolicy
     public function accessOrder(User $user , Purchaseorder $purchaseorder){
 
         if($user->isAdmin()){
-            return false;
+            return true;
         } else {
             return $purchaseorder->user_id === $user->id;
         }

@@ -25,3 +25,8 @@ function errors($errors)
         echo "</div>";
     }
 }
+
+function message($msg)
+{
+    echo "<div style='direction:ltr;text-align: left' class='alert alert-success green'>" . (Session::get('msg') == '' ? $msg : Session::get('msg')) . "</div>";
+}

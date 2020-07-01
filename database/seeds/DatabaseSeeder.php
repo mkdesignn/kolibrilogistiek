@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-//         $this->call(UsersTableSeeder::class);
+         $this->call(AdminSeeder::class);
 
         factory(\App\Purchaseorder::class, 30)->create()->each(function($purchaseOrder){
             factory(\App\Purchaseorderlines::class)
@@ -20,5 +20,7 @@ class DatabaseSeeder extends Seeder
                     'user_id'=>$purchaseOrder->user_id
                 ]);
         });
+
+
     }
 }

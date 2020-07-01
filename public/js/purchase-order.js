@@ -1,22 +1,4 @@
 
-$(document).ready(function() {
-    // $('.customers').select2();
-
-    $('.supplier').select2({
-        ajax: {
-            url: window.location.origin + "/users/suppliers",
-            dataType: 'json',
-            processResults: function (data) {
-                console.log(data);
-                // Transforms the top-level key of the response object from 'items' to 'results'
-                return {
-                    results: data
-                };
-            }
-        } }
-    );
-    console.log("supplier");
-});
 
 new Vue({
     el: '.purchase-order',
@@ -28,6 +10,8 @@ new Vue({
 
         this.getAllPurchasedLine();
         this.renderExpectedAt();
+        this.renderCustomers();
+        this.renderSuppliers();
     },
     methods:{
 
@@ -60,8 +44,37 @@ new Vue({
             }
         },
         removePurchaseOrder: function(index){
-
             this.purchase_order_rows.splice(index, 1);
+        },
+
+        renderSuppliers: function(){
+            $('.supplier').select2({
+                ajax: {
+                    url: window.location.origin + "/users/suppliers",
+                    dataType: 'json',
+                    processResults: function (data) {
+                        console.log(data);
+                        // Transforms the top-level key of the response object from 'items' to 'results'
+                        return {
+                            results: data
+                        };
+                    }
+                } }
+            );
+        },
+        renderCustomers: function(){
+
+            $('.customers').select2({
+                ajax: {
+                    url: window.location.origin + "/users/customers",
+                    dataType: 'json',
+                    processResults: function (data) {
+                        return {
+                            results: data
+                        };
+                    }
+                } }
+            );
 
         },
         renderExpectedAt: function(){

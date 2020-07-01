@@ -16,6 +16,7 @@ Route::get('orders/purchased', 'OrderController@create')
 Route::post('orders/purchased', 'OrderController@StorePurchased')->name('purchased.store');
 
 Route::get('users/suppliers', 'UserController@getSuppliers');
+Route::get('users/customers', 'UserController@getCustomers');
 Route::get('products', 'ProductController@getIndex');
 Route::put('orders/purchased/{order_id}', 'OrderController@UpdatePurchased')
     ->middleware('bindings')

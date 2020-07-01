@@ -56,7 +56,12 @@ class OrderController extends Controller
      */
     public function purchased(){
 
-        $purchased = $this->purchaseorder->whereCustomerId(Auth::user()->id)->paginate(10);
+        if(Auth::user()->isAdmin()){
+            $purchased = $this->purchaseorder->paginate();
+        } else {
+            $purchased = $this->purchaseorder->whereCustomerId(Auth::user()->id)->paginate();
+        }
+
         return view('order.purchased.index', compact('purchased'));
     }
 
@@ -83,8 +88,7 @@ class OrderController extends Controller
             ]);
         }
 
-
-        return redirect()->to(route('purchased.list'));
+        return redirect()->to(route('purchased.list'))->with(['msg'=>'Purchase order with uuid: '.$createdOrder->uuid.' has been created.']);
 
     }
 
@@ -117,7 +121,7 @@ class OrderController extends Controller
         }
 
 
-        return redirect()->to(route('purchased.list'));
+        return redirect()->to(route('purchased.list'))->with(['msg'=>'Purchase order with uuid: '.$order->uuid.' has been updated.']);
     }
 
     public function show($order){
