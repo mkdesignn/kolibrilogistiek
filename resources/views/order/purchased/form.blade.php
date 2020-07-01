@@ -13,6 +13,9 @@
 
                         <div class="card-body">
 
+                            {{ !empty(Session::get('status'))? message(Session::get('status')):"" }}
+                            {{ errors($errors) }}
+
                             <div class="row">
 
                                 @if($loggedUser->isAdmin())
@@ -27,7 +30,7 @@
                                     <div class="col-md-6 col-lg-6 col-sm-6">
                                         <div class="form-group">
                                             <label>Supplier</label>
-                                            <select name="supplier" style="width:100%;" class="form-control supplier">
+                                            <select name="supplier_id" style="width:100%;" class="form-control supplier">
                                                 @if($order->supplier_id !== null)
                                                     <option value="{{$order->supplier_id}}">{{$order->supplier->name}}</option>
                                                 @endif
@@ -38,21 +41,21 @@
                                 <div class="col-md-6 col-lg-6 col-sm-6">
                                     <div class="form-group">
                                         <label for="reference">Purchase order reference</label>
-                                        <input name="order_number" type="text" class="form-control" value="{{$order->number}}" id="reference">
+                                        {{Form::text('number', $order->number, ['class'=>'form-control'])}}
                                     </div>
                                 </div>
 
                                 <div class="col-md-6 col-lg-6 col-sm-6">
                                     <div class="form-group">
-                                        <label for="Expected">Expected</label>
-                                        <input name="expected" type="text" class="form-control expected_date" value="{{$order->expected_at}}" id="Expected">
+                                        <label for="Expected">Expected at</label>
+                                        {{Form::text('expected_at', $order->expected_at, ['class'=>'form-control expected_date'])}}
                                     </div>
                                 </div>
 
                                 <div class="col-md-12 col-lg-12 col-sm-12">
                                     <div class="form-group">
                                         <label for="track">Track & trace</label>
-                                        <input name="trackandtrace" type="text" class="form-control" value="{{$order->trackandtrace}}" id="track">
+                                        {{Form::text('trackandtrace', $order->trackandtrace, ['class'=>'form-control'])}}
                                     </div>
                                 </div>
                             </div>

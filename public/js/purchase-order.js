@@ -27,6 +27,7 @@ new Vue({
     mounted: function(){
 
         this.getAllPurchasedLine();
+        this.renderExpectedAt();
     },
     methods:{
 
@@ -34,33 +35,44 @@ new Vue({
 
             let vm = this;
 
-            axios.get(window.location.origin + "/orders/purchased/"+this.order_id+"/lines").then(function(response){
+            if(this.order_id !== ''){
 
-                response.data.forEach(function(line, index){
-                    vm.purchase_order_rows.push({
-                        quantity: line.quantity,
-                        sku: line.product.sku,
-                        product_id: line.product.id,
-                        product_name: line.product.name,
-                        batch: line.batch,
-                        expire_date: line.expire_date,
-                        index: index
+                axios.get(window.location.origin + "/orders/purchased/"+this.order_id+"/lines").then(function(response){
+
+                    response.data.forEach(function(line, index){
+                        vm.purchase_order_rows.push({
+                            quantity: line.quantity,
+                            sku: line.product.sku,
+                            product_id: line.product.id,
+                            product_name: line.product.name,
+                            batch: line.batch,
+                            expire_date: line.expire_date,
+                            index: index
+                        });
+
+                        window.setTimeout(function(){
+                            vm.renderExpireDate(index, line.expire_date);
+                            vm.renderSelect2(index);
+                        }, 100);
                     });
-
-                    window.setTimeout(function(){
-                        vm.renderDateRangePicker(index, line.expire_date);
-                        vm.renderSelect2(index);
-                    }, 100);
                 });
-            });
+
+            }
         },
         removePurchaseOrder: function(index){
 
             this.purchase_order_rows.splice(index, 1);
 
         },
-        testMe: function(index){
-            console.log(index);
+        renderExpectedAt: function(){
+            $('.expected_date').daterangepicker(
+                {
+                    singleDatePicker: true,
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    }
+                }
+            );
         },
         renderSelect2: function(index){
 
@@ -88,7 +100,7 @@ new Vue({
                 vm.purchase_order_rows[index].sku = repo_global.sku;
             });
         },
-        renderDateRangePicker: function(index, startDate){
+        renderExpireDate: function(index, startDate){
 
             let vm = this,
                 dateRangePicker = {
@@ -131,7 +143,7 @@ new Vue({
             window.setTimeout(function(){
 
                 vm.renderSelect2(index);
-                vm.renderDateRangePicker(index);
+                vm.renderExpireDate(index);
 
             }, 300);
         }

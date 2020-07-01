@@ -24,7 +24,15 @@ class StorePurchased extends FormRequest
     public function rules()
     {
         return [
-            //
+            'supplier_id'=>'required',
+            'expected_at'=>'required|date',
+            'number'=>'required',
+            'trackandtrace'=>'required',
+            'quantity' => 'required|array',
+            'product'=>'required|array',
+            'batch'=>'array',
+            'expire_date'=>'array',
+            'expire_date.*'=>'date'
         ];
     }
 }

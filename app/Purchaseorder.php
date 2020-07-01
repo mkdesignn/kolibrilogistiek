@@ -6,10 +6,10 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid as UuidAlias;
+use Webpatser\Uuid\Uuid;
 
 class Purchaseorder extends Model
 {
-//    use \TenantScope, \CustomerScope;
 
     protected $table = 'purchaseorders';
 
@@ -19,6 +19,18 @@ class Purchaseorder extends Model
         'expected_at',
         'received_at'
     ];
+
+
+    /**
+     *  Boot model with uuidv4
+     */
+    public static function boot()
+    {
+        parent::boot();
+        self::creating(function ($model) {
+            $model->uuid = \Ramsey\Uuid\Uuid::getFactory()->uuid4();
+        });
+    }
 
     public function customer(){
         return $this->hasOne(User::class, 'id', 'customer_id');

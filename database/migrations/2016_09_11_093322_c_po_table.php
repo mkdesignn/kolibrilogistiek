@@ -25,8 +25,8 @@ class CPoTable extends Migration
             $table->string('number');
 
             $table->date('expected_at');
-            $table->date('shipped_at');
-            $table->dateTime('received_at');
+            $table->date('shipped_at')->nullable();
+            $table->dateTime('received_at')->nullable();
             $table->text('trackandtrace');
 
             $table->unique(['customer_id', 'number']);

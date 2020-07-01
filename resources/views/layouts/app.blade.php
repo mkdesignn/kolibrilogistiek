@@ -62,7 +62,11 @@
                                     </a>
 
                                     <a class="dropdown-item" href="{{ route('purchased.list') }}">
-                                        {{ __('list of purchase orders') }}
+                                        {{ __('Purchased orders') }}
+                                    </a>
+
+                                    <a class="dropdown-item" href="{{ route('purchased.create') }}">
+                                        {{ __('Create a new purchase') }}
                                     </a>
 
                                     <a class="dropdown-item" href="{{ route('dashboard') }}">

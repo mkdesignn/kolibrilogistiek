@@ -61,10 +61,37 @@ class OrderController extends Controller
     }
 
     public function storePurchased(StorePurchased $storePurchased){
-        dd($storePurchased->all());
+
+        $customerId = $storePurchased->customer_id;
+        if(Auth::user()->isAdmin()){
+            $createdOrder = $this->purchaseorder
+                ->create($storePurchased->only(['customer_id', 'supplier_id', 'number', 'expected_at', 'trackandtrace']) + ['user_id'=>$customerId]);
+        } else {
+            $customerId = Auth::user()->id;
+            $createdOrder = $this->purchaseorder->create($storePurchased->only(['supplier_id', 'number', 'expected_at', 'trackandtrace']) +
+                ['user_id'=>$customerId, 'customer_id'=>$customerId]);
+        }
+
+        foreach($storePurchased->product as $key => $productId){
+            $this->purchaseorderlines->create([
+                'purchaseorder_id'=>$createdOrder->id,
+                'product_id'=>$productId,
+                'user_id'=>$customerId,
+                'batch'=>$storePurchased->has('batch') ? $storePurchased->batch[$key] : null,
+                'quantity'=>$storePurchased->quantity[$key],
+                'expire_date'=>$storePurchased->has('expire_date') ? $storePurchased->expire_date[$key]: null,
+            ]);
+        }
+
+
+        return redirect()->to(route('purchased.list'));
+
     }
 
-    public function updatePurchased($order, UpdatePurchased $storePurchased){
+    public function updatePurchased($order, UpdatePurchased $storePurchased)
+    {
+
+        $this->authorize('accessOrder', $order);
 
         $customerId = $storePurchased->customer_id;
         if(Auth::user()->isAdmin()){
@@ -95,7 +122,15 @@ class OrderController extends Controller
 
     public function show($order){
 
+        $this->authorize('accessOrder', $order);
+
         return view('order.purchased.show', compact('order'));
+    }
+
+    public function create(){
+
+        $order = new Purchaseorder();
+        return view('order.purchased.create', compact('order'));
     }
 
     public function purchasedLine($order){
