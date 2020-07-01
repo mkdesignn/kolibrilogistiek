@@ -33,15 +33,6 @@ class CPoTable extends Migration
 
         });
 
-        Schema::create('suppliers', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
-            $table->integer('customer_id')->unsigned();
-            $table->string('name');
-
-            $table->unique(['customer_id', 'name']);
-
-        });
     }
 
     /**
@@ -52,6 +43,5 @@ class CPoTable extends Migration
     public function down()
     {
         Schema::drop('purchaseorders');
-        Schema::drop('suppliers');
     }
 }

@@ -61,11 +61,9 @@
                                         {{ __('Logout') }}
                                     </a>
 
-                                    @if(\Illuminate\Support\Facades\Auth::user()->role === 'admin')
-                                        <a class="dropdown-item" href="{{ route('purchased.list') }}">
-                                            {{ __('list of purchase orders') }}
-                                        </a>
-                                    @endif
+                                    <a class="dropdown-item" href="{{ route('purchased.list') }}">
+                                        {{ __('list of purchase orders') }}
+                                    </a>
 
                                     <a class="dropdown-item" href="{{ route('dashboard') }}">
                                         {{ __('Dashboard') }}
@@ -88,5 +86,6 @@
     </div>
 
     <script src="{{ asset('js/dashboard.js') }}"></script>
+    @yield('footer')
 </body>
 </html>

@@ -6,6 +6,8 @@
  */
 window.chart = require('chart.js');
 window.daterangepicker = require("daterangepicker");
+window.select2 = require('select2');
+window.Vue = require('vue');
 
 require('./bootstrap');
 

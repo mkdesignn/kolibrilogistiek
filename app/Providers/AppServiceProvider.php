@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -15,8 +16,9 @@ class AppServiceProvider extends ServiceProvider
     {
         view()->composer(['*'], function($view){
 
+            $loggedUser = Auth::user();
             $javascriptConfig = "";
-            $view->with(compact('javascriptConfig'));
+            $view->with(compact('javascriptConfig', 'loggedUser'));
         });
     }
 

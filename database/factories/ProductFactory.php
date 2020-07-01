@@ -15,10 +15,12 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Product::class, function (Faker $faker) {
 
-    $admin = factory(\App\User::class)->create(['role'=>'admin']);
-
+    $user = \App\User::whereIn('role', [\App\Utils\Enums\Role::SUPPLIER])->inRandomOrder()->first();
     return [
-        'title' => $faker->title,
-        'user_id' => $admin->id,
+        'name' => $faker->name,
+        'sku' => $faker->languageCode,
+        'qty' => random_int(1, 1000),
+        'thumbnail' => $faker->imageUrl(),
+        'user_id' => $user->id,
     ];
 });

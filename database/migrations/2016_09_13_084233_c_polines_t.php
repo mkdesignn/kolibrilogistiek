@@ -22,6 +22,8 @@ class CPolinesT extends Migration
             $table->integer('product_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->integer('received_by')->unsigned()->default(0);
+            $table->string('batch')->nullable();
+            $table->date('expire_date')->nullable();
 
             $table->integer('quantity')->unsigned();
             $table->integer('quantity_received')->unsigned()->default(0);

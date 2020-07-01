@@ -48,6 +48,6 @@ class Purchaseorderlines extends Model
      */
     public function product()
     {
-        return $this->belongsTo('DogStocker\Product');
+        return $this->belongsTo(Product::class);
     }
 }

@@ -57,3 +57,4 @@ function refreshChart(startDate, endDate){
 }
 
 refreshChart(START_DATE, END_DATE);
+

@@ -23,4 +23,13 @@ class Purchaseorder extends Model
     public function customer(){
         return $this->hasOne(User::class, 'id', 'customer_id');
     }
+
+    public function supplier(){
+        return $this->hasOne(User::class, 'id', 'supplier_id');
+    }
+
+    public function lines(){
+
+        return $this->hasMany(Purchaseorderlines::class);
+    }
 }
