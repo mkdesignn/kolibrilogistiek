@@ -8,6 +8,7 @@ use App\Http\Requests\UpdatePurchased;
 use App\Purchaseorder;
 use App\Purchaseorderlines;
 use App\Utils\Enums\Role;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -31,11 +32,14 @@ class OrderController extends Controller
      */
     public function __construct(Purchaseorder $purchaseorder, Purchaseorderlines $purchaseorderlines)
     {
-        $this->middleware('auth');
         $this->purchaseorder = $purchaseorder;
         $this->purchaseorderlines = $purchaseorderlines;
     }
 
+    /**
+     * @param ShippedOrderRequest $request
+     * @return mixed
+     */
     public function shipped(ShippedOrderRequest $request)
     {
 
@@ -51,8 +55,8 @@ class OrderController extends Controller
     }
 
 
-    /*
-     *
+    /**
+     * @return Factory|\Illuminate\View\View
      */
     public function purchased(){
 
@@ -65,6 +69,10 @@ class OrderController extends Controller
         return view('order.purchased.index', compact('purchased'));
     }
 
+    /**
+     * @param StorePurchased $storePurchased
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function storePurchased(StorePurchased $storePurchased){
 
         $customerId = $storePurchased->customer_id;
@@ -92,6 +100,12 @@ class OrderController extends Controller
 
     }
 
+    /**
+     * @param $order
+     * @param UpdatePurchased $storePurchased
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function updatePurchased($order, UpdatePurchased $storePurchased)
     {
 
@@ -124,6 +138,11 @@ class OrderController extends Controller
         return redirect()->to(route('purchased.list'))->with(['msg'=>'Purchase order with uuid: '.$order->uuid.' has been updated.']);
     }
 
+    /**
+     * @param $order
+     * @return Factory|\Illuminate\View\View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
     public function show($order){
 
         $this->authorize('accessOrder', $order);
@@ -131,17 +150,22 @@ class OrderController extends Controller
         return view('order.purchased.show', compact('order'));
     }
 
+    /**
+     * @return Factory|\Illuminate\View\View
+     */
     public function create(){
 
         $order = new Purchaseorder();
         return view('order.purchased.create', compact('order'));
     }
 
+    /**
+     * @param $order
+     * @return mixed
+     */
     public function purchasedLine($order){
 
         return $order->lines()->with('product')->get();
     }
-
-
 
 }

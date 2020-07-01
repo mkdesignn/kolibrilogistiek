@@ -2,6 +2,10 @@
 
 namespace Tests;
 
+use App\Purchaseorder;
+use App\Purchaseorderlines;
+use App\User;
+use App\Utils\Enums\Role;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
@@ -25,4 +29,29 @@ abstract class TestCase extends BaseTestCase
     // HTTP ACTION
     const HTTP_GET = 'get';
     const HTTP_POST = 'post';
+
+    protected function createOrder(int $userId)
+    {
+        return factory(Purchaseorder::class)->create(['user_id'=>$userId, 'customer_id'=>$userId]);
+    }
+
+    protected function createOrderLine(Purchaseorder $order)
+    {
+        return factory(Purchaseorderlines::class)->create(['purchaseorder_id'=>$order->id, 'user_id'=>$order->user_id]);
+    }
+
+    protected function createCustomer()
+    {
+        return factory(User::class)->create(['role'=>Role::CUSTOMER]);
+    }
+
+    protected function createSupplier()
+    {
+        return factory(User::class)->create(['role'=>Role::SUPPLIER]);
+    }
+
+    protected function createAdmin()
+    {
+        return factory(User::class)->create(['role'=>Role::ADMIN]);
+    }
 }

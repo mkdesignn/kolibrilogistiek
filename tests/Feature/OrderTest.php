@@ -92,4 +92,173 @@ class OrderTest extends TestCase
         $this->get('dashboard')
             ->assertStatus(self::HTTP_REDIRECT);
     }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function purchased_should_return_specific_view_with_specific_orders()
+    {
+        $customer = $this->createCustomer();
+        $this->be($customer);
+        $order = $this->createOrder($customer->id);
+        $order = $this->createOrderLine($order);
+
+        $this->get('orders/purchased/list')
+            ->assertStatus(self::HTTP_OK)
+            ->assertViewIs('order.purchased.index')
+            ->assertViewHas('purchased', function($purchased){
+                $this->assertEquals(count($purchased->items()), 1);
+                return true;
+            });
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function purchased_should_not_return_the_any_data_if_user_did_not_have_any()
+    {
+        $customer = $this->createCustomer();
+        $order = $this->createOrder($customer->id);
+        $order = $this->createOrderLine($order);
+
+        $secondCustomer = $this->createCustomer();
+        $this->be($secondCustomer);
+
+        $this->get('orders/purchased/list')
+            ->assertStatus(self::HTTP_OK)
+            ->assertViewIs('order.purchased.index')
+            ->assertViewHas('purchased', function($purchased){
+                $this->assertEquals(count($purchased->items()), 0);
+                return true;
+            });
+    }
+
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function purchased_should_return_all_data_if_user_was_admin()
+    {
+        $admin = $this->createAdmin();
+
+        $firstCustomer = $this->createCustomer();
+        $order = $this->createOrder($firstCustomer->id);
+        $order = $this->createOrderLine($order);
+
+        $secondCustomer = $this->createCustomer();
+        $order = $this->createOrder($secondCustomer->id);
+        $order = $this->createOrderLine($order);
+
+        $this->be($admin);
+
+        $this->get('orders/purchased/list')
+            ->assertStatus(self::HTTP_OK)
+            ->assertViewIs('order.purchased.index')
+            ->assertViewHas('purchased', function($purchased){
+                $this->assertEquals(count($purchased->items()), 2);
+                return true;
+            });
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function storePurchased_should_store_new_order()
+    {
+        $admin = $this->createAdmin();
+
+        $customer = $this->createCustomer();
+        $order = $this->createOrder($customer->id);
+        $orderLine = $this->createOrderLine($order);
+
+        $suplier = $this->createSupplier();
+
+        $this->be($admin);
+
+        $this->json('post', 'orders/purchased',
+            [
+                'customer_id'=>$customer->id,
+                'supplier_id'=>$suplier->id,
+                'expected_at'=>now()->toDateTimeString(),
+                'number'=>random_int(1, 9999),
+                'trackandtrace'=>'test',
+                'quantity'=>[1],
+                'product'=>[$orderLine->product->id]
+            ])
+            ->assertStatus(self::HTTP_REDIRECT)
+            ->assertRedirect(route('purchased.list'));
+    }
+
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function updatePurchased_should_update_order()
+    {
+        $admin = $this->createAdmin();
+
+        $customer = $this->createCustomer();
+        $order = $this->createOrder($customer->id);
+        $orderLine = $this->createOrderLine($order);
+
+        $suplier = $this->createSupplier();
+
+        $this->be($admin);
+
+        $this->json('put', 'orders/purchased/' . $order->id,
+            [
+                'customer_id'=>$customer->id,
+                'supplier_id'=>$suplier->id,
+                'expected_at'=>now()->toDateTimeString(),
+                'number'=>random_int(1, 9999),
+                'trackandtrace'=>'test',
+                'quantity'=>[2],
+                'product'=>[$orderLine->product->id]
+            ])
+            ->assertStatus(self::HTTP_REDIRECT)
+            ->assertRedirect(route('purchased.list'));
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function show_should_return_the_correct_view()
+    {
+        $admin = $this->createAdmin();
+
+        $customer = $this->createCustomer();
+        $order = $this->createOrder($customer->id);
+
+        $this->be($admin);
+
+        $this->json('get', 'orders/purchased/' . $order->id)
+            ->assertViewIs('order.purchased.show');
+    }
+
+    /**
+     * @test
+     *
+     * @return void
+     */
+    public function create_should_return_the_correct_view()
+    {
+        $admin = $this->createAdmin();
+
+        $this->be($admin);
+
+        $this->json('get', 'orders/purchased')
+            ->assertViewIs('order.purchased.create');
+    }
 }

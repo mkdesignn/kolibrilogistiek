@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StorePurchased extends FormRequest
 {
@@ -24,6 +25,7 @@ class StorePurchased extends FormRequest
     public function rules()
     {
         return [
+            'customer_id'=>Auth::user()->isAdmin() ? 'required' : '',
             'supplier_id'=>'required',
             'expected_at'=>'required|date',
             'number'=>'required',
